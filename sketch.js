@@ -1,11 +1,15 @@
 const Engine = Matter.Engine;
 const World= Matter.World;
 const Bodies = Matter.Bodies;
+const Constraint=Matter.Constraint;
 
 var engine, world;
-function preload() {
- polygon_img=loadImage("polygon.png")
 
+
+
+function preload() {
+     boyImage= loadImage("boy.png");
+     treeImage= loadImage("tree.png");
 }
 
 function setup(){
@@ -13,60 +17,79 @@ function setup(){
     engine = Engine.create();
     world = engine.world;
 
-    ground= new Ground(600,550,1200,20);
-   
-    base= new Ground(450,430,160,10);
-   
-    block1= new Box(390,410,20,30);
-    block2= new Box(410,410,20,30);
-    block3= new Box(430,410,20,30);
-    block4= new Box(450,410,20,30);
-    block5= new Box(470,410,20,30);
-    block6= new Box(490,410,20,30);
-    block7= new Box(510,410,20,30);
-   
-    block8= new Box2(415,390,20,30);
-    block9= new Box2(435,390,20,30);
-    block10= new Box2(455,390,20,30);
-    block11= new Box2(475,390,20,30);
-    block12= new Box2(495,390,20,30);
-   
-    block13= new Box3(440,370,20,30);
-    block14= new Box3(460,370,20,30);
-    block15= new Box3(480,370,20,30);
+    
+    ground = new Ground(600,590,1200,20);
 
-    block16= new Box4(460,350,20,30);
+    
+   
+    mango1 = new Mango(850,300,40);
+    mango2 = new Mango(700,360,40);
+  
 
-    //ploygon= Bodies.circles(50,200,20);
-    World.add(world,polygon)
+    mango3 = new Mango(800,350,40);
+    mango4 = new Mango(750,300,40);
+ 
 
-    slingShot= new SlingShot(this.polygon,{x:100,y:200});
+    
+
+    mango5 = new Mango(900,360,40);
+
+   
+    stoneObj = new Stone(230,470,40);
+
+    sling= new Rope(stoneObj.body,{x:230,y:480});
+
+   
+
 }
 
 function draw(){
-    background("black");
+    background("white");
+   
     Engine.update(engine);
     
-    
-    ground.display();
-   base.display();
-   block1.display();
-   block2.display();
-   block3.display();
-   block4.display();
-   block5.display();
-   block6.display();
-   block7.display();
-   block8.display();
-   block9.display();
-   block10.display();
-   block11.display();
-   block12.display();
-   block13.display();
-   block14.display();
-   block15.display();
-   block16.display();
+    image (treeImage,800,400,350,400);
 
-   image(CENTER)
-   image(polygon_img,polygon.position.x,polygon.position.y,40,40);
+    ground.display();
+
+  
+    mango1.display();
+    detectcollision(stoneObj,mango1);
+  
+    mango2.display();
+    detectcollision(stoneObj,mango2);
+   
+    mango3.display();
+    detectcollision(stoneObj,mango3);
+
+    mango4.display();
+    detectcollision(stoneObj,mango4);
+   
+    mango5.display();
+    detectcollision(stoneObj,mango5);
+    
+    
+    sling.display();
+
+    image (boyImage,300,530,250,200);
+    
+    
+    stoneObj.display();
 }
+function mouseDragged(){
+    Matter.Body.setPosition(stoneObj.body,{x:mouseX,y:mouseY});
+
+
+}
+function mouseReleased(){
+    sling.fly();
+}
+function detectcollision(body1,body2){
+      mangoBodyPosition=body1.body.position
+      stoneBodyPosition=body2.body.position
+      
+
+      var distance=dist(stoneBodyPosition.x,stoneBodyPosition.y,mangoBodyPosition.x,mangoBodyPosition.y)
+     if(distance<=body1.r+body2.r){
+    Matter.Body.setStatic(body1.body,false);
+}    }
